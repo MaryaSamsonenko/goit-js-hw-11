@@ -69,4 +69,4 @@ module.exports=require("./lib/axios");
 },{"./lib/axios":"nUiQ"}],"Focm":[function(require,module,exports) {
 "use strict";require("./sass/main.scss");var e=s(require("notiflix")),r=s(require("axios"));function s(e){return e&&e.__esModule?e:{default:e}}
 },{"./sass/main.scss":"clu1","notiflix":"hWOm","axios":"dZBD"}]},{},["Focm"], null)
-//# sourceMappingURL=/goit-js-hw-10/src.e59b4656.js.map
+//# sourceMappingURL=/goit-js-hw-10/src.b8addb6a.js.map
