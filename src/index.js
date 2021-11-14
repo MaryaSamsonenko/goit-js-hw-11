@@ -1,6 +1,7 @@
 import './sass/main.scss';
 import Notiflix from 'notiflix';
 import SearchPhotoApiService from './services/api';
+import 'material-icons/iconfont/material-icons.css';
 
 const searchPhotoApiService = new SearchPhotoApiService();
 const galleryEl = document.querySelector('.gallery');
@@ -9,21 +10,13 @@ const searchInputEl = document.querySelector('.search-input');
 const buttonEl = document.querySelector('.button');
 const loadMoreEl = document.querySelector('.load-more');
 
-formEl.addEventListener('submit', onSearh);
+formEl.addEventListener('submit', onSearch);
 
-async function onSearh(event) {
+function onSearch(event) {
   event.preventDefault();
-  searchPhotoApiService.searchQuery = event.target.value;
-  try {
-    const { data } = await searchPhotoApiService.fetchPhoto();
-
-    addGalleryMarkup(data);
-    // checkSearchLehgth(data);
-  } catch (error) {
-    Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.',
-    );
-  }
+  searchPhotoApiService.query = event.target.elements.searchQuery.value;
+  console.log(event.target.elements.searchQuery.value);
+  onFetch();
 }
 function clearMarkup() {
   galleryEl.innerHTML = '';
@@ -36,23 +29,28 @@ function clearMarkup() {
 function addGalleryMarkup({ ...data }) {
   console.log(data);
   const markupPreview = data.hits.reduce(
-    (acc, { webformatURL, likes, views, comments, downloads }) =>
+    (acc, { webformatURL, likes, views, comments, downloads, tags }) =>
       acc +
       `<div class="photo-card">
-  <img src="${webformatURL}" alt="" loading="lazy" />
+  <div class="wrapper-img"><img class='photo-img' src="${webformatURL}" alt="${tags}" loading="lazy" /></div>
   <div class="info">
-    <p class="info-item">
-      <b>Likes: ${likes}</b>
-    </p>
-    <p class="info-item">
-      <b>Views: ${views} </b>
-    </p>
-    <p class="info-item">
-      <b>Comments: ${comments}</b>
-    </p>
-    <p class="info-item">
-      <b>Downloads: ${downloads}</b>
-    </p>
+    <div class="info-item">
+      <span class="material-icons-outlined">favorite_border</span>
+      <p class="info-text">${likes}</p>
+    </div>
+    <div class="info-item">
+     
+      <span class="material-icons-outlined">preview</span>
+      <p class="info-text">${views}</p>
+    </div>
+    <div class="info-item">
+      <span class="material-icons-outlined">comment</span>
+       <p class="info-text">${comments}</p>
+    </div>
+    <div class="info-item">
+      <span class="material-icons-outlined">download</span>
+      <p class="info-text">${downloads}</p>
+    </div>
   </div>
 </div>
 `,
@@ -62,4 +60,16 @@ function addGalleryMarkup({ ...data }) {
 }
 function showGalleryMarkup(markup) {
   galleryEl.insertAdjacentHTML('afterbegin', markup);
+}
+
+async function onFetch() {
+  try {
+    const { data } = await searchPhotoApiService.fetchPhoto();
+
+    addGalleryMarkup(data);
+  } catch (error) {
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.',
+    );
+  }
 }
