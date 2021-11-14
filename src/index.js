@@ -32,7 +32,7 @@ function addGalleryMarkup({ ...data }) {
     (acc, { webformatURL, likes, views, comments, downloads, tags }) =>
       acc +
       `<div class="photo-card">
-  <div class="wrapper-img"><img class='photo-img' src="${webformatURL}" alt="${tags}" loading="lazy" /></div>
+  <a class="wrapper-img" href="#"><img class='photo-img' src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
   <div class="info">
     <div class="info-item">
       <span class="material-icons-outlined">favorite_border</span>
