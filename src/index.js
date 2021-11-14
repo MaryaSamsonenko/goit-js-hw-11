@@ -29,33 +29,29 @@ function clearMarkup() {
   galleryEl.innerHTML = '';
 }
 
-function checkSearchLehgth(photo) {
-  //   if (photo.length > 10) {
-  //     Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
-  //   } else if (photo.length >= 2 && photo.length <= 10) {
-  //     addListMarkup(photo);
-  //   }
-}
+// function checkSearchLehgth(photo) {
+
+// }
 
 function addGalleryMarkup({ ...data }) {
   console.log(data);
   const markupPreview = data.hits.reduce(
-    (acc, obj) =>
+    (acc, { webformatURL, likes, views, comments, downloads }) =>
       acc +
       `<div class="photo-card">
-  <img src="${obj.webformatURL}" alt="" loading="lazy" />
+  <img src="${webformatURL}" alt="" loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>Likes: ${obj.likes}</b>
+      <b>Likes: ${likes}</b>
     </p>
     <p class="info-item">
-      <b>Views: ${obj.views} </b>
+      <b>Views: ${views} </b>
     </p>
     <p class="info-item">
-      <b>Comments: ${obj.comments}</b>
+      <b>Comments: ${comments}</b>
     </p>
     <p class="info-item">
-      <b>Downloads: ${obj.downloads}</b>
+      <b>Downloads: ${downloads}</b>
     </p>
   </div>
 </div>
