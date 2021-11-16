@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: 8px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14);
+  // box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14);
 }
 .info-item {
   display: flex;
@@ -37,8 +37,7 @@
   margin-left: 30px;
   margin-top: 30px;
 
-  box-shadow: var(--team-border-shadow);
-  border-radius: 0px 0px 4px 4px;
+  box-shadow: 5px 5px 5px gray;
 }
 .wrapper-img {
   display: block;
@@ -51,4 +50,7 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+.is-hidden {
+  display: none;
 }

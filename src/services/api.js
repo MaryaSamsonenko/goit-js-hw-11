@@ -9,14 +9,14 @@ export default class SearchPhotoApiService {
     this.searchQuery = '';
     this.page = 1;
     this.perPage = PER_PAGE;
+    // this.totalHits = data.totalHits;
   }
   async fetchPhoto() {
-    const url = `https://pixabay.com/api/?key=24310244-ee4074f763d6520362b30c74e&q=${this.searchQuery}&image_type=photo&per_page=40&page=1&orientation=horizontal&safesearch=true`;
+    const url = `https://pixabay.com/api/?key=24310244-ee4074f763d6520362b30c74e&q=${this.searchQuery}&image_type=photo&per_page=${this.perPage}&page=${this.page}&orientation=horizontal&safesearch=true`;
     // const url = 'https://pixabay.com/api/?key=24310244-ee4074f763d6520362b30c74e&q=yellow+flowers&image_type=photo&pretty=true';
 
     const data = await axios.get(url);
 
-    console.log(data);
     this.incrementPage();
     return data;
   }

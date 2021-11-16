@@ -4,30 +4,43 @@ import SearchPhotoApiService from './services/api';
 import 'material-icons/iconfont/material-icons.css';
 
 const searchPhotoApiService = new SearchPhotoApiService();
+
 const galleryEl = document.querySelector('.gallery');
 const formEl = document.querySelector('.search-form');
 const searchInputEl = document.querySelector('.search-input');
 const buttonEl = document.querySelector('.button');
 const loadMoreEl = document.querySelector('.load-more');
-
+console.log(loadMoreEl);
 formEl.addEventListener('submit', onSearch);
+loadMoreEl.addEventListener('click', onLoadMorePhoto);
 
 function onSearch(event) {
+  // clearMarkup();
+
   event.preventDefault();
   searchPhotoApiService.query = event.target.elements.searchQuery.value;
-  console.log(event.target.elements.searchQuery.value);
+
+  if (searchPhotoApiService.query === '') {
+    Notiflix.Notify.info('Please, type your search query');
+    clearCardsContainer();
+    return;
+  }
+
+  onFetch();
+
+  loadMoreEl.classList.remove('is-hidden');
+  // Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images...`);
+  if (searchPhotoApiService.query.length >= PER_PAGE) {
+    loadMoreEl.classList.remove('is-hidden');
+    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+  }
+}
+
+function onLoadMorePhoto() {
   onFetch();
 }
-function clearMarkup() {
-  galleryEl.innerHTML = '';
-}
-
-// function checkSearchLehgth(photo) {
-
-// }
 
 function addGalleryMarkup({ ...data }) {
-  console.log(data);
   const markupPreview = data.hits.reduce(
     (acc, { webformatURL, likes, views, comments, downloads, tags }) =>
       acc +
@@ -59,7 +72,7 @@ function addGalleryMarkup({ ...data }) {
   showGalleryMarkup(markupPreview);
 }
 function showGalleryMarkup(markup) {
-  galleryEl.insertAdjacentHTML('afterbegin', markup);
+  galleryEl.insertAdjacentHTML('beforeend', markup);
 }
 
 async function onFetch() {
@@ -72,4 +85,7 @@ async function onFetch() {
       'Sorry, there are no images matching your search query. Please try again.',
     );
   }
+}
+function clearMarkup() {
+  galleryEl.innerHTML = '';
 }
