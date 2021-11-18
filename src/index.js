@@ -8,32 +8,25 @@ const searchPhotoApiService = new SearchPhotoApiService();
 const galleryEl = document.querySelector('.gallery');
 const formEl = document.querySelector('.search-form');
 const searchInputEl = document.querySelector('.search-input');
-const buttonEl = document.querySelector('.button');
 const loadMoreEl = document.querySelector('.load-more');
-console.log(loadMoreEl);
-formEl.addEventListener('submit', onSearch);
-loadMoreEl.addEventListener('click', onLoadMorePhoto);
 
+formEl.addEventListener('submit', onSearch);
+
+loadMoreEl.addEventListener('click', onLoadMorePhoto);
 function onSearch(event) {
-  // clearMarkup();
+  clearMarkup();
 
   event.preventDefault();
   searchPhotoApiService.query = event.target.elements.searchQuery.value;
 
   if (searchPhotoApiService.query === '') {
     Notiflix.Notify.info('Please, type your search query');
-    clearCardsContainer();
+    clearMarkup();
     return;
   }
+  showLoadMoreBtn();
 
   onFetch();
-
-  loadMoreEl.classList.remove('is-hidden');
-  // Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images...`);
-  if (searchPhotoApiService.query.length >= PER_PAGE) {
-    loadMoreEl.classList.remove('is-hidden');
-    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
-  }
 }
 
 function onLoadMorePhoto() {
@@ -77,10 +70,27 @@ function showGalleryMarkup(markup) {
 
 async function onFetch() {
   try {
-    const { data } = await searchPhotoApiService.fetchPhoto();
+    const { data, hasNextPage } = await searchPhotoApiService.fetchPhoto();
 
     addGalleryMarkup(data);
+
+    if (data.totalHits > 0) {
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images...`);
+    }
+    if (data.totalHits === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.',
+      );
+      hideLoadMoreBtn();
+      return;
+    }
+    if (!hasNextPage) {
+      hideLoadMoreBtn();
+      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+      return;
+    }
   } catch (error) {
+    console.log('error');
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.',
     );
@@ -88,4 +98,10 @@ async function onFetch() {
 }
 function clearMarkup() {
   galleryEl.innerHTML = '';
+}
+function showLoadMoreBtn() {
+  loadMoreEl.classList.remove('is-hidden');
+}
+function hideLoadMoreBtn() {
+  loadMoreEl.classList.add('is-hidden');
 }

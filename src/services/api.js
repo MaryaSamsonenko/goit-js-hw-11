@@ -15,10 +15,14 @@ export default class SearchPhotoApiService {
     const url = `https://pixabay.com/api/?key=24310244-ee4074f763d6520362b30c74e&q=${this.searchQuery}&image_type=photo&per_page=${this.perPage}&page=${this.page}&orientation=horizontal&safesearch=true`;
     // const url = 'https://pixabay.com/api/?key=24310244-ee4074f763d6520362b30c74e&q=yellow+flowers&image_type=photo&pretty=true';
 
-    const data = await axios.get(url);
+    const { data } = await axios.get(url);
 
     this.incrementPage();
-    return data;
+    const totalPage = Math.ceil(data.totalHits / this.perPage);
+    const hasNextPage = this.page <= totalPage;
+    console.log(totalPage);
+
+    return { data, hasNextPage };
   }
   get query() {
     return this.searchQuery;
